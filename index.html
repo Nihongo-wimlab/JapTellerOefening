@@ -359,11 +359,11 @@
     </main>
 
     <!-- CHEATSHEET MODAL -->
-    <div id="cheatsheet-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300">
-        <div class="bg-white border-8 border-yellow-300 rounded-[2.5rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative transform scale-95 transition-transform duration-300">
+    <div id="cheatsheet-modal" onclick="closeCheatSheetOnOutsideClick(event)" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300">
+        <div id="cheatsheet-content" class="bg-white border-8 border-yellow-300 rounded-[2.5rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative transform scale-95 transition-transform duration-300">
             
             <!-- Close button -->
-            <button onclick="closeCheatSheet()" class="absolute top-4 right-4 w-10 h-10 bg-pink-400 hover:bg-pink-500 text-white font-black rounded-full border-2 border-white flex items-center justify-center shadow-md active:scale-95 transition-all">
+            <button onclick="closeCheatSheet()" class="absolute top-4 right-4 w-10 h-10 bg-pink-400 hover:bg-pink-500 text-white font-black rounded-full border-2 border-white flex items-center justify-center shadow-md active:scale-95 transition-all z-[60]">
                 ❌
             </button>
 
@@ -1525,20 +1525,34 @@
 
         function openCheatSheet() {
             const modal = document.getElementById('cheatsheet-modal');
+            const content = document.getElementById('cheatsheet-content');
             modal.classList.remove('hidden');
             setTimeout(() => {
-                modal.firstElementChild.classList.remove('scale-95');
-                modal.firstElementChild.classList.add('scale-100');
+                if (content) {
+                    content.classList.remove('scale-95');
+                    content.classList.add('scale-100');
+                }
             }, 10);
         }
 
         function closeCheatSheet() {
             const modal = document.getElementById('cheatsheet-modal');
-            modal.firstElementChild.classList.remove('scale-100');
-            modal.firstElementChild.classList.add('scale-95');
+            const content = document.getElementById('cheatsheet-content');
+            if (content) {
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
+            }
             setTimeout(() => {
                 modal.classList.add('hidden');
             }, 150);
+        }
+
+        function closeCheatSheetOnOutsideClick(event) {
+            const content = document.getElementById('cheatsheet-content');
+            // Als de leerling op de donkere achtergrond klikt en niet op de cheatsheet zelf, sluit de modal
+            if (content && !content.contains(event.target)) {
+                closeCheatSheet();
+            }
         }
 
         // Generate Kawaii Floating Bubbles & Stars
